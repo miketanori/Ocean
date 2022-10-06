@@ -2,7 +2,7 @@ import './style.css'
 import * as THREE from './three/three.module.js';
 
 import { OrbitControls } from './three/OrbitControls.js';
-import { Water } from './three/objects/Water.js';
+import { Water } from './three/Water.js';
 import { Sky } from './three/Sky.js';
 
 let camera, scene, renderer;
