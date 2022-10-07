@@ -1,35 +1,39 @@
-import './style.css'
-import * as THREE from './three/three.module.js';
+//import './style.css'
+//import * as THREE from "https://cdn.skypack.dev/three";
+//import \* as THREE from './three/module.js';
 
-import { OrbitControls } from './three/OrbitControls.js';
-import { Water } from './three/Water.js';
-import { Sky } from './three/Sky.js';
+//import { OrbitControls } from 'https://cdn.skypack.dev/three/examples/jsm/controls/OrbitControls.js';
+//import { Water } from './Water.js';
+//import { Sky } from './Sky.js';
+
 
 let camera, scene, renderer;
 let controls, water, sun;
 
-init();
-animate();
+  init();
+  animate();
+
 
 function init() {
 
+  // SCENE
+  // Create a new Three.js scene
+  scene = new THREE.Scene();
 
-  //
+  // CAMERA
+  // Create a camera so we can view the scene
+  camera = new THREE.PerspectiveCamera( 55, window.innerWidth / window.innerHeight, 1, 20000 );
+  camera.position.set( 30, 30, 100 );
 
-  renderer = new THREE.WebGLRenderer();
+  // RENDERER
+  // Create the Three.js renderer and attach it to our canvas
+  renderer = new THREE.WebGLRenderer( { antialias: true } );
   renderer.setPixelRatio( window.devicePixelRatio );
   renderer.setSize( window.innerWidth, window.innerHeight );
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   document.body.appendChild( renderer.domElement );
 
-  //
-
-  scene = new THREE.Scene();
-
-  camera = new THREE.PerspectiveCamera( 55, window.innerWidth / window.innerHeight, 1, 20000 );
-  camera.position.set( 30, 30, 100 );
-
-  //
+  //SUN
 
   sun = new THREE.Vector3();
 
@@ -101,7 +105,7 @@ function init() {
   updateSun();
 
 
-  controls = new OrbitControls( camera, renderer.domElement );
+  controls = new THREE.OrbitControls( camera, renderer.domElement );
   controls.maxPolarAngle = Math.PI * 0.495;
   controls.target.set( 0, 10, 0 );
   controls.minDistance = 40.0;
@@ -115,25 +119,40 @@ function init() {
 
 }
 
-function onWindowResize() {
 
+/*
+ * ANIMATION AND RENDER
+ * Functions used animate and render the scene.
+ */
+
+// Function to let the animations work correctly.
+function animate() {
+  // Do the animation each frame.
+  requestAnimationFrame( animate );
+  // Render the scene.
+  render();
+}
+
+// Function to render the scene
+function render() {
+  water.material.uniforms[ 'time' ].value += 0.30 / 60.0;
+  // Render the scene.
+  renderer.render( scene, camera );
+
+}
+
+/*
+ * LISTENERS
+ * Functions used for listeners to generate some kind of output or interaction.
+ */
+
+// Function to detect if the window was resized to reset
+// sizes depending on the new window.
+function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
 
   renderer.setSize( window.innerWidth, window.innerHeight );
-
 }
 
-function animate() {
 
-  requestAnimationFrame( animate );
-  render();
-}
-
-function render() {
-
-  water.material.uniforms[ 'time' ].value += 0.30 / 60.0;
-
-  renderer.render( scene, camera );
-
-}
